@@ -7,6 +7,7 @@ using RestSharp.Serialization.Json;
 using log4net;
 using log4net.Config;
 using FluentAssertions;
+using System.Configuration;
 
 namespace SpecFlowDemos
 {
@@ -19,24 +20,46 @@ namespace SpecFlowDemos
         [TestMethod]
         public void TestMethod1()
         {
-            var client = new RestClient("http://localhost:3000/");           
-            var request = new RestRequest("posts/{post}",Method.GET);
+            var client = new RestClient("http://localhost:3000/");
+            var request = new RestRequest("posts/{post}", Method.GET);
             request.AddUrlSegment("post", 1);
             var jsonresponse = client.Execute(request);
-             
+
             var deserialiserObject = new JsonDeserializer();
-            var dictObj= deserialiserObject.Deserialize<Dictionary<string, string>>(jsonresponse);
-            
+            var dictObj = deserialiserObject.Deserialize<Dictionary<string, string>>(jsonresponse);
+
             string response = dictObj["id"].ToString();
             log.Info("Welcome to log4net logging");
             log.Info("Value of id is " + response);
-            response.Should().NotBeNull("The value of id should be not null but found :" +response );
+            response.Should().NotBeNull("The value of id should be not null but found :" + response);
 
             response = dictObj["title"].ToString();
             log.Info("Value of title is " + response);
             response.Should().NotBeNull("The value of title should be not null but found :" + response);
 
+            //we can use the JObject for deserialiation
 
+
+        }
+
+        [TestMethod]
+        public void PostMethodCallAnonymous()
+        {
+            var client = new RestClient("http://localhost:3000/");
+            var request = new RestRequest("posts/", Method.POST);
+            request.AddJsonBody(new { name = "New added post from API code" });
+            client.Execute(request);
+        }
+
+
+
+        [TestMethod]
+        public void PostMethodCallTyped()
+        {
+            var client = new RestClient("http://localhost:3000/");
+            var request = new RestRequest("posts/", Method.POST);
+            request.AddJsonBody(new Posts {  author = "prasanth", title = "Testing api from typed method code" }); ;
+            client.Execute(request);
         }
     }
 }
