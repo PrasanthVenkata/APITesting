@@ -20,3 +20,6 @@
 2020-10-11 08:13:52,738 [12] INFO SpecFlowDemos.UnitTest1 - Value of title is json-server
 2020-10-13 06:23:59,954 [14] DEBUG SpecFlowDemos.UnitTest1 - Author name from newly added record is prasanth
 2020-10-13 06:40:01,825 [12] DEBUG SpecFlowDemos.UnitTest1 - Author name from newly added record is prasanth
+2020-10-13 07:16:36,542 [12] DEBUG SpecFlowDemos.UnitTest1 - Author name from newly added record is prasanth
+2020-10-13 07:18:28,551 [12] DEBUG SpecFlowDemos.UnitTest1 - Author name from newly added record is prasanth
+2020-10-13 07:20:00,158 [12] DEBUG SpecFlowDemos.UnitTest1 - Author name from newly added record is (Async methods) prasanth

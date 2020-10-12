@@ -8,6 +8,7 @@ using log4net;
 using log4net.Config;
 using FluentAssertions;
 using System.Configuration;
+using System.Threading.Tasks;
 
 namespace SpecFlowDemos
 {
@@ -85,5 +86,41 @@ namespace SpecFlowDemos
             log.Debug("Author name from newly added record is " + authorName);
             authorName.Should().Be("prasanth");
         }
+
+
+
+
+        [TestMethod]
+        // here using the Asynchronous call
+        public void PostMethodASyncCall()
+        {
+            var client = new RestClient("http://localhost:3000/");
+            var request = new RestRequest("posts/", Method.POST);
+            // creating a new record
+            request.AddJsonBody(new Posts { author = "prasanth", title = "Testing api from Aysnc method code" }); ;
+            //   var response = client.Execute<Posts>(request).Data;
+            var response = ExecuteAsyncRequest<Posts>(client, request).GetAwaiter().GetResult();
+            string authorName = response.Data.author;
+            log.Debug("Author name from newly added record is (Async methods) " + authorName);
+            authorName.Should().Be("prasanth");
+        }
+
+
+        private async Task<IRestResponse<T>> ExecuteAsyncRequest<T>(RestClient client, IRestRequest req) where T: class, new ()
+        {
+            var taskCompletionSource = new TaskCompletionSource<IRestResponse<T>>();
+          
+            client.ExecuteAsync<T>(req, restResponse =>
+            {
+                if (restResponse.ErrorException != null)
+                {
+                    const string message = "Error retreiving response";
+                    throw new ApplicationException(message, restResponse.ErrorException);
+                }
+                taskCompletionSource.SetResult(restResponse);
+            });
+            return await taskCompletionSource.Task;
+        }
+
     }
 }
