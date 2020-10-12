@@ -43,6 +43,7 @@ namespace SpecFlowDemos
         }
 
         [TestMethod]
+        // here the class is anonymous
         public void PostMethodCallAnonymous()
         {
             var client = new RestClient("http://localhost:3000/");
@@ -54,12 +55,35 @@ namespace SpecFlowDemos
 
 
         [TestMethod]
+        // here the class is strongly typed - new Posts class
         public void PostMethodCallTyped()
         {
             var client = new RestClient("http://localhost:3000/");
             var request = new RestRequest("posts/", Method.POST);
+            // creating a new record
             request.AddJsonBody(new Posts {  author = "prasanth", title = "Testing api from typed method code" }); ;
-            client.Execute(request);
+            var response = client.Execute(request);
+            var deserObj = new JsonDeserializer();
+            var outputDict = deserObj.Deserialize<Dictionary<string, string>>(response);
+            string authorName =  outputDict["author"];
+            log.Debug("Author name from newly added record is " + authorName);
+            authorName.Should().Be("prasanth");
+        }
+
+
+
+        [TestMethod]
+        // here the class is strongly typed - new Posts class
+        public void PostMethodCallTypedWithClassName()
+        {
+            var client = new RestClient("http://localhost:3000/");
+            var request = new RestRequest("posts/", Method.POST);
+            // creating a new record
+            request.AddJsonBody(new Posts { author = "prasanth", title = "Testing api from typed method code" }); ;
+            var response = client.Execute<Posts>(request).Data;
+            string authorName = response.author;
+            log.Debug("Author name from newly added record is " + authorName);
+            authorName.Should().Be("prasanth");
         }
     }
 }

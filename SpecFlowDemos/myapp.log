@@ -18,3 +18,5 @@
 2020-10-11 08:13:52,726 [12] INFO SpecFlowDemos.UnitTest1 - Welcome to log4net logging
 2020-10-11 08:13:52,736 [12] INFO SpecFlowDemos.UnitTest1 - Value of id is 1
 2020-10-11 08:13:52,738 [12] INFO SpecFlowDemos.UnitTest1 - Value of title is json-server
+2020-10-13 06:23:59,954 [14] DEBUG SpecFlowDemos.UnitTest1 - Author name from newly added record is prasanth
+2020-10-13 06:40:01,825 [12] DEBUG SpecFlowDemos.UnitTest1 - Author name from newly added record is prasanth
